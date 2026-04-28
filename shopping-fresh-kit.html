@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>鲜食到家 - 番茄浓汤食材包</title>
+    <style>
+      :root {
+        --green: #00b578;
+        --dark: #18251f;
+        --text: #17211d;
+        --muted: #6a7771;
+        --line: #edf1ef;
+        --bg: #f6f8f7;
+        --orange: #ff6f2c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          "PingFang SC",
+          "Microsoft YaHei",
+          Arial,
+          sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        padding: 0 28px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(12px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 900;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--green);
+        color: #fff;
+      }
+
+      .delivery {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .exit-ad {
+        position: fixed;
+        top: 16px;
+        right: 18px;
+        z-index: 8;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        padding: 0 12px;
+        border: 1px solid rgba(0, 181, 120, 0.24);
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--green);
+        font-size: 14px;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(24, 37, 31, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .exit-ad:hover,
+      .exit-ad:focus-visible {
+        background: var(--green);
+        color: #fff;
+        outline: none;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 24px 24px 112px;
+      }
+
+      .product {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 420px;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .gallery,
+      .summary,
+      .section {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .hero-img {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        display: block;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .fresh-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        overflow: hidden;
+        border-top: 1px solid var(--line);
+        border-radius: 0 0 8px 8px;
+        background: var(--line);
+      }
+
+      .fresh-strip div {
+        padding: 14px;
+        background: #fff;
+      }
+
+      .fresh-strip strong,
+      .fresh-strip span {
+        display: block;
+      }
+
+      .fresh-strip strong {
+        color: var(--green);
+        font-size: 16px;
+      }
+
+      .fresh-strip span {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .summary {
+        position: sticky;
+        top: 88px;
+        padding: 24px;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      .tag {
+        padding: 5px 8px;
+        border-radius: 4px;
+        background: rgba(0, 181, 120, 0.1);
+        color: var(--green);
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 30px;
+        line-height: 1.18;
+      }
+
+      .subtitle {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .price {
+        margin-top: 22px;
+        color: var(--orange);
+        font-size: 38px;
+        font-weight: 900;
+      }
+
+      .price small {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: line-through;
+      }
+
+      .specs {
+        display: grid;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .spec {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px;
+        border-radius: 6px;
+        background: #f7faf8;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .spec strong {
+        color: var(--text);
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn {
+        height: 48px;
+        border: 0;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .btn-light {
+        background: rgba(0, 181, 120, 0.1);
+        color: var(--green);
+      }
+
+      .btn-main {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .section {
+        margin-top: 24px;
+        padding: 24px;
+      }
+
+      .section h2 {
+        margin: 0 0 16px;
+        font-size: 22px;
+      }
+
+      .bundle {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .bundle-item {
+        padding: 14px;
+        border-radius: 6px;
+        background: #f7faf8;
+      }
+
+      .bundle-item strong,
+      .bundle-item span {
+        display: block;
+      }
+
+      .bundle-item span {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .review {
+        display: grid;
+        gap: 12px;
+      }
+
+      .review-card {
+        padding: 14px;
+        border-radius: 6px;
+        background: #f7faf8;
+        line-height: 1.5;
+      }
+
+      .bottom-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 4;
+        display: flex;
+        justify-content: center;
+        border-top: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(12px);
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 92px;
+        z-index: 6;
+        padding: 12px 18px;
+        border-radius: 6px;
+        background: rgba(23, 33, 29, 0.92);
+        color: #fff;
+        font-weight: 800;
+        opacity: 0;
+        transform: translate(-50%, 12px);
+        transition:
+          opacity 0.18s ease,
+          transform 0.18s ease;
+      }
+
+      .toast.active {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      .bottom-inner {
+        display: grid;
+        grid-template-columns: 1fr 180px;
+        gap: 14px;
+        width: min(1180px, 100%);
+        padding: 12px 24px;
+      }
+
+      @media (max-width: 860px) {
+        .product {
+          grid-template-columns: 1fr;
+        }
+
+        .summary {
+          position: static;
+        }
+
+        .bundle {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="exit-ad" href="tencent-video-player-mock.html?adReturn=1">退出广告</a>
+
+    <header class="topbar">
+      <a class="brand" href="tencent-video-player-mock.html?adReturn=1">
+        <span class="brand-mark">鲜</span>
+        <span>鲜食到家</span>
+      </a>
+      <div class="delivery">腾讯视频 AI 场景广告推荐 · 30 分钟达</div>
+    </header>
+
+    <main class="page">
+      <section class="product">
+        <div>
+          <div class="gallery">
+            <img class="hero-img" src="assets/fresh-ingredients.jpg" alt="番茄浓汤食材包" />
+            <div class="fresh-strip">
+              <div><strong>今日鲜配</strong><span>下单后按份分装</span></div>
+              <div><strong>冷链配送</strong><span>最快 30 分钟达</span></div>
+              <div><strong>AI 菜谱</strong><span>同步推荐烹饪步骤</span></div>
+            </div>
+          </div>
+
+          <section class="section">
+            <h2>食材包内容</h2>
+            <div class="bundle">
+              <div class="bundle-item"><strong>番茄</strong><span>约 350g</span></div>
+              <div class="bundle-item"><strong>洋葱 & 蒜</strong><span>提香基础配料</span></div>
+              <div class="bundle-item"><strong>意面</strong><span>适合 1-2 人份</span></div>
+              <div class="bundle-item"><strong>浓汤底料</strong><span>番茄风味</span></div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>用户评价</h2>
+            <div class="review">
+              <div class="review-card">“看视频时推荐得挺准，刚好想做番茄味的晚饭。”</div>
+              <div class="review-card">“食材包分量适合一人食，半小时送到这点很实用。”</div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="summary">
+          <div class="tag-row">
+            <span class="tag">AI 场景推荐</span>
+            <span class="tag">快手菜</span>
+            <span class="tag">30分钟达</span>
+          </div>
+          <h1>番茄浓汤食材包</h1>
+          <p class="subtitle">根据你正在观看的厨房剧情生成：番茄底味、调味动作、家庭晚餐场景，一键配齐下一餐。</p>
+          <div class="price">¥19.9 <small>¥29.9</small></div>
+          <div class="specs">
+            <div class="spec"><span>规格</span><strong>1-2 人份</strong></div>
+            <div class="spec"><span>配送</span><strong>最快 30 分钟达</strong></div>
+            <div class="spec"><span>保鲜</span><strong>当日分装冷藏</strong></div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-light" data-toast="已收藏番茄浓汤食材包">收藏</button>
+            <button class="btn btn-main" data-toast="已加入购物车">加入购物车</button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <div class="bottom-bar">
+      <div class="bottom-inner">
+        <button class="btn btn-light" data-toast="客服正在为你保留这份推荐">咨询客服</button>
+        <button class="btn btn-main" data-toast="已进入确认购买流程">立即购买</button>
+      </div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script>
+      const toast = document.querySelector("#toast");
+      let toastTimer = null;
+      document.querySelectorAll("[data-toast]").forEach((button) => {
+        button.addEventListener("click", () => {
+          toast.textContent = button.dataset.toast;
+          toast.classList.add("active");
+          window.clearTimeout(toastTimer);
+          toastTimer = window.setTimeout(() => toast.classList.remove("active"), 1800);
+        });
+      });
+    </script>
+  </body>
+</html>

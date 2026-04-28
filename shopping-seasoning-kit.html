@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>海天味极鲜 - 番茄提鲜调味组合</title>
+    <style>
+      :root {
+        --red: #d9381e;
+        --gold: #f5b846;
+        --ink: #201714;
+        --muted: #7d6f6b;
+        --cream: #fff8ee;
+        --line: #eadfd5;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        overflow: hidden;
+        background: var(--cream);
+        color: var(--ink);
+        font-family:
+          "PingFang SC",
+          "Microsoft YaHei",
+          Arial,
+          sans-serif;
+      }
+
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 58px;
+        padding: 0 34px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 248, 238, 0.94);
+        backdrop-filter: blur(12px);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--red);
+        font-size: 20px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .logo-mark {
+        display: grid;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--red);
+        color: #fff;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 22px;
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .nav-links a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .exit-ad {
+        position: fixed;
+        top: 14px;
+        right: 18px;
+        z-index: 8;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        padding: 0 12px;
+        border: 1px solid rgba(217, 56, 30, 0.24);
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--red);
+        font-size: 14px;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(83, 45, 23, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .exit-ad:hover,
+      .exit-ad:focus-visible {
+        background: var(--red);
+        color: #fff;
+        outline: none;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(330px, 0.72fr);
+        gap: 24px;
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 14px 24px 8px;
+        align-items: center;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(36px, 4.55vw, 58px);
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .hero h1 span {
+        color: var(--red);
+      }
+
+      .lead {
+        max-width: 600px;
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .badge {
+        padding: 6px 10px;
+        border: 1px solid rgba(217, 56, 30, 0.22);
+        border-radius: 4px;
+        background: #fff;
+        color: var(--red);
+        font-weight: 900;
+      }
+
+      .product-card {
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 24px 60px rgba(83, 45, 23, 0.12);
+      }
+
+      .product-card img {
+        width: 100%;
+        aspect-ratio: 16 / 7.25;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+
+      .price-row {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 10px;
+      }
+
+      .price {
+        color: var(--red);
+        font-size: 32px;
+        font-weight: 900;
+      }
+
+      .buy {
+        min-width: 128px;
+        height: 42px;
+        border: 0;
+        border-radius: 6px;
+        background: var(--red);
+        color: #fff;
+        font-size: 16px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 34px;
+        z-index: 6;
+        padding: 12px 18px;
+        border-radius: 6px;
+        background: rgba(32, 23, 20, 0.92);
+        color: #fff;
+        font-weight: 800;
+        opacity: 0;
+        transform: translate(-50%, 12px);
+        transition:
+          opacity 0.18s ease,
+          transform 0.18s ease;
+      }
+
+      .toast.active {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      .sections {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 0 24px 18px;
+      }
+
+      .section {
+        margin-top: 8px;
+        min-height: 102px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .section h2 {
+        margin: 0 0 10px;
+        font-size: 21px;
+      }
+
+      .compact-info {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .tile {
+        padding: 12px;
+        border-radius: 6px;
+        background: #fff8ee;
+      }
+
+      .tile strong,
+      .tile span {
+        display: block;
+      }
+
+      .tile strong {
+        font-size: 17px;
+      }
+
+      .tile span {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .flavor-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .flavor-strip .tile {
+        min-height: 78px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .recipe {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .step {
+        min-height: 48px;
+        padding: 10px 12px;
+        border-left: 4px solid var(--gold);
+        background: #fff8ee;
+        font-size: 14px;
+        line-height: 1.32;
+        display: flex;
+        align-items: center;
+      }
+
+      @media (max-width: 1100px) {
+        .hero h1 {
+          font-size: 46px;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+          white-space: normal;
+        }
+
+        body {
+          overflow: auto;
+        }
+
+        .compact-info,
+        .flavor-strip,
+        .grid,
+        .recipe {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="exit-ad" href="tencent-video-player-mock.html?adReturn=1">退出广告</a>
+
+    <header class="nav">
+      <a class="logo" href="tencent-video-player-mock.html?adReturn=1">
+        <span class="logo-mark">海</span>
+        <span>海天味极鲜</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#product">产品</a>
+        <a href="#recipe">菜谱</a>
+        <a href="#story">品牌故事</a>
+      </nav>
+    </header>
+
+    <main class="hero">
+      <section>
+        <div class="badge-row">
+          <span class="badge">腾讯视频 AI 场景推荐</span>
+          <span class="badge">番茄风味</span>
+          <span class="badge">海天调味</span>
+        </div>
+        <h1>给这锅番茄<span>补一勺鲜味</span></h1>
+        <p class="lead">根据剧情里的番茄翻炒动作推荐：海天味极鲜、浓汤底、香草点缀，适合番茄汤、意面和家常炖菜。</p>
+      </section>
+
+      <aside class="product-card" id="product">
+        <img src="assets/haitian-seasoning-ad-keyvisual.png" alt="海天味极鲜番茄提鲜调味组合" />
+        <h2>海天味极鲜调味组合</h2>
+        <p>1 瓶味极鲜 · 适合番茄锅和家常菜</p>
+        <div class="price-row">
+          <div class="price">¥12.9</div>
+          <button class="buy" data-toast="已进入一键购买流程">一键购买</button>
+        </div>
+      </aside>
+    </main>
+
+    <section class="sections">
+      <div class="compact-info">
+        <div class="section" id="story">
+          <div class="flavor-strip">
+            <div class="tile"><strong>味极鲜</strong><span>补足咸鲜层次，减少反复试味。</span></div>
+            <div class="tile"><strong>番茄锅</strong><span>提升番茄底味，适合汤汁类菜品。</span></div>
+            <div class="tile"><strong>收口提香</strong><span>出锅前少量加入，让家常菜更有完成感。</span></div>
+          </div>
+        </div>
+
+        <div class="section" id="recipe">
+          <h2>AI 推荐吃法</h2>
+          <div class="recipe">
+            <div class="step">1. 番茄底炒出香气</div>
+            <div class="step">2. 少量加入味极鲜</div>
+            <div class="step">3. 翻匀补足咸鲜层次</div>
+            <div class="step">4. 出锅前撒香草</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script>
+      const toast = document.querySelector("#toast");
+      let toastTimer = null;
+      document.querySelectorAll("[data-toast]").forEach((button) => {
+        button.addEventListener("click", () => {
+          toast.textContent = button.dataset.toast;
+          toast.classList.add("active");
+          window.clearTimeout(toastTimer);
+          toastTimer = window.setTimeout(() => toast.classList.remove("active"), 1800);
+        });
+      });
+    </script>
+  </body>
+</html>
