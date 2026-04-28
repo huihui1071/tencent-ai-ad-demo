@@ -283,7 +283,7 @@
       }
 
       .ad-card::before {
-        content: "AI剧情广告";
+        content: "广告";
         position: absolute;
         left: 18px;
         top: 18px;
@@ -1072,31 +1072,16 @@
           <span>3 秒后进入剧情广告体验。</span>
         </div>
 
-        <section class="ad-layer" id="adLayer" aria-label="AI 场景广告">
+        <section class="ad-layer" id="adLayer" aria-label="广告">
           <div class="ad-backdrop" aria-hidden="true"></div>
           <div class="ad-scan" aria-hidden="true"></div>
-          <div class="ad-scene-tags" aria-hidden="true">
-            <span class="scene-tag">识别剧情：番茄翻炒</span>
-            <span class="scene-tag">识别动作：准备调味</span>
-            <span class="scene-tag">AI 推荐：海天味极鲜</span>
-          </div>
           <div class="ad-meta">
-            <span class="ad-countdown" id="adCountdown">AI广告 10s</span>
+            <span class="ad-countdown" id="adCountdown">广告 10s</span>
             <button class="ad-skip" id="adSkipButton" type="button" disabled>广告播放中</button>
             <button class="ad-exit" id="adExitButton" type="button">退出广告</button>
           </div>
           <div class="ad-content">
             <div class="ad-step ad-step-split" data-ad-step="result">
-              <div>
-                <div class="ad-kicker">AI 剧情短片播放中</div>
-                <h2 class="ad-title" id="adResultTitle">这锅番茄香气，AI 已经<span>配好下一餐</span></h2>
-                <p class="ad-copy" id="adResultCopy">识别到家常烹饪、番茄风味和调味动作，为你生成“30 分钟送达”的同款食材包。</p>
-                <div class="ad-detections" aria-hidden="true">
-                  <span id="adTagOne">番茄底味</span>
-                  <span id="adTagTwo">家庭厨房</span>
-                  <span id="adTagThree">即时配送</span>
-                </div>
-              </div>
               <aside class="ad-card">
                 <div class="ad-media">
                   <img class="ad-card-image" id="adCardImage" src="assets/fresh-ingredients.jpg" alt="" />
@@ -1111,8 +1096,8 @@
                 </div>
                 <div class="ad-brand" id="adBrand">鲜食到家 x 腾讯视频</div>
                 <div class="ad-product" id="adProduct">番茄浓汤食材包</div>
-                <a class="ad-card-link" id="adCardLink" href="shopping-fresh-kit.html" aria-label="AI剧情广告">
-                  <span class="ad-card-link-text">AI剧情广告</span>
+                <a class="ad-card-link" id="adCardLink" href="shopping-fresh-kit.html" aria-label="广告">
+                  <span class="ad-card-link-text">广告</span>
                 </a>
                 <div class="ad-offer">
                   <div class="ad-price" id="adPrice">¥19.9</div>
@@ -1124,10 +1109,10 @@
             <div class="ad-step ad-step-split" data-ad-step="end">
               <div class="ad-end">
                 <div class="ad-kicker">广告短片已播放完成</div>
-                <h2 class="ad-end-title" id="adEndTitle">已为你保留这份推荐</h2>
+                <h2 class="ad-end-title" id="adEndTitle">商品信息已为你保留</h2>
                 <p class="ad-end-copy" id="adEndCopy">点击链接可查看同款食材包；也可以退出广告，继续观看正片。</p>
                 <div class="ad-end-actions">
-                  <a class="ad-link" id="adLink" href="https://v.qq.com" target="_blank" rel="noreferrer">查看推荐</a>
+                  <a class="ad-link" id="adLink" href="https://v.qq.com" target="_blank" rel="noreferrer">查看商品详情</a>
                   <button class="ad-secondary" id="adResumeButton" type="button">继续正片</button>
                 </div>
               </div>
@@ -1137,8 +1122,8 @@
               </div>
               <div class="ad-brand" id="adEndBrand">鲜食到家 x 腾讯视频</div>
               <div class="ad-product" id="adEndProduct">番茄浓汤食材包</div>
-                <a class="ad-card-link" id="adEndCardLink" href="shopping-fresh-kit.html" aria-label="AI剧情广告">
-                  <span class="ad-card-link-text">AI剧情广告</span>
+                <a class="ad-card-link" id="adEndCardLink" href="shopping-fresh-kit.html" aria-label="广告">
+                  <span class="ad-card-link-text">广告</span>
                 </a>
                 <div class="ad-offer">
                 <div class="ad-price" id="adEndPrice">¥19.9</div>
@@ -1239,8 +1224,6 @@
       const adExitButton = document.querySelector("#adExitButton");
       const adResumeButton = document.querySelector("#adResumeButton");
       const adStepNodes = document.querySelectorAll("[data-ad-step]");
-      const adResultTitle = document.querySelector("#adResultTitle");
-      const adResultCopy = document.querySelector("#adResultCopy");
       const adBrand = document.querySelector("#adBrand");
       const adProduct = document.querySelector("#adProduct");
       const adPrice = document.querySelector("#adPrice");
@@ -1249,9 +1232,6 @@
       const adCard = document.querySelector("[data-ad-step='result'] .ad-card");
       const adCardImage = document.querySelector("#adCardImage");
       const adCardVideo = document.querySelector("#adCardVideo");
-      const adTagOne = document.querySelector("#adTagOne");
-      const adTagTwo = document.querySelector("#adTagTwo");
-      const adTagThree = document.querySelector("#adTagThree");
       const adEndTitle = document.querySelector("#adEndTitle");
       const adEndCopy = document.querySelector("#adEndCopy");
       const adEndBrand = document.querySelector("#adEndBrand");
@@ -1275,16 +1255,11 @@
       const shouldResumeAfterAdReturn = urlParams.get("adReturn") === "1";
       const adVariants = {
         fresh: {
-          keyword: "提鲜方案",
-          generatingCopy: "AI 正在把番茄底味、调味动作与调味品牌卖点匹配。",
-          title: "想更鲜一点？AI 给这锅菜<span>补一勺灵魂</span>",
-          copy: "根据当前烹饪动作生成调味组合：番茄浓汤底 + 鲜味酱汁 + 香草点缀。",
           brand: "海天味极鲜 x 腾讯视频",
           product: "番茄提鲜调味组合",
           price: "¥12.9",
           cta: "一键购买",
-          tags: ["番茄锅", "味极鲜", "海天调味"],
-          endTitle: "海天提鲜方案已生成",
+          endTitle: "商品信息已为你保留",
           endCopy: "点击可查看同款味极鲜调味组合；退出广告后继续从剧情原点播放。",
           link: "shopping-seasoning-kit.html",
           image: "assets/haitian-seasoning-ad-keyvisual.png",
@@ -1293,16 +1268,11 @@
           duration: adShortMs
         },
         easy: {
-          keyword: "省事方案",
-          generatingCopy: "AI 正在把家庭厨房、即时配送和一键下单链路组合成广告。",
-          title: "想更省事？AI 已经<span>配好下一餐</span>",
-          copy: "识别到家常烹饪、番茄风味和调味动作，为你生成“30 分钟送达”的同款食材包。",
           brand: "鲜食到家 x 腾讯视频",
           product: "番茄浓汤食材包",
           price: "¥19.9",
           cta: "一键加入",
-          tags: ["家庭厨房", "即时配送", "食材包"],
-          endTitle: "食材包已为你保留",
+          endTitle: "商品信息已为你保留",
           endCopy: "点击可查看同款食材包；退出广告后继续从剧情原点播放。",
           link: "shopping-fresh-kit.html",
           image: "assets/fresh-ingredients.jpg",
@@ -1471,8 +1441,6 @@
         const variant = adVariants[choice] || adVariants.easy;
         adChoice = choice;
 
-        adResultTitle.innerHTML = variant.title;
-        adResultCopy.textContent = variant.copy;
         adBrand.textContent = variant.brand;
         adProduct.textContent = variant.product;
         adPrice.textContent = variant.price;
@@ -1482,9 +1450,6 @@
         adCardImage.src = variant.image;
         adCardVideo.src = variant.video || "";
         adCard.classList.toggle("video-mode", Boolean(variant.videoAd));
-        [adTagOne, adTagTwo, adTagThree].forEach((node, index) => {
-          node.textContent = variant.tags[index];
-        });
         adEndTitle.textContent = variant.endTitle;
         adEndCopy.textContent = variant.endCopy;
         adEndBrand.textContent = variant.brand;
@@ -1494,7 +1459,7 @@
         adEndCardLink.href = variant.link;
         adEndCardImage.src = variant.image;
         adLink.href = variant.link;
-        adLink.textContent = choice === "fresh" ? "查看调味组合" : "查看食材包";
+        adLink.textContent = "查看商品详情";
         activeAdDuration = variant.duration || adShortMs;
 
         return variant;
@@ -1518,7 +1483,7 @@
         const elapsed = Math.min(activeAdDuration / 1000, (Date.now() - adStartedAt) / 1000);
         const remaining = Math.max(0, Math.ceil(activeAdDuration / 1000 - elapsed));
 
-        adCountdown.textContent = `AI广告 ${remaining}s`;
+        adCountdown.textContent = `广告 ${remaining}s`;
         adSkipButton.disabled = adPhase !== "end";
         adSkipButton.textContent = adPhase === "end" ? "继续正片" : "广告播放中";
 
