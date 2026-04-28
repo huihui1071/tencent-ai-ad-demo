@@ -1122,25 +1122,6 @@
             <button class="ad-exit" id="adExitButton" type="button">退出广告</button>
           </div>
           <div class="ad-content">
-            <div class="ad-step ad-step-intro active" data-ad-step="choice">
-              <div class="ad-kicker">腾讯视频 AI 场景广告</div>
-              <h2 class="ad-title">AI 根据剧情生成<span>海天提鲜短片</span></h2>
-              <p class="ad-copy">识别到番茄翻炒、调味动作和家庭厨房场景，正在播放剧情相关广告。</p>
-              <div class="ad-detections" aria-hidden="true">
-                <span>锅具</span>
-                <span>番茄底味</span>
-                <span>调味动作</span>
-                <span>家庭厨房</span>
-              </div>
-            </div>
-
-            <div class="ad-step ad-generating" data-ad-step="generating">
-              <div class="ad-kicker">AI 正在生成广告</div>
-              <h2 class="ad-title">正在结合你的选择，生成<span id="adGeneratingKeyword">专属推荐</span></h2>
-              <p class="ad-copy" id="adGeneratingCopy">识别剧情物体、烹饪动作和消费意图，匹配品牌卖点。</p>
-              <div class="ad-loader" aria-hidden="true"></div>
-            </div>
-
             <div class="ad-step ad-step-split" data-ad-step="result">
               <div>
                 <div class="ad-kicker">AI 剧情短片播放中</div>
@@ -1310,8 +1291,6 @@
       const adExitButton = document.querySelector("#adExitButton");
       const adResumeButton = document.querySelector("#adResumeButton");
       const adStepNodes = document.querySelectorAll("[data-ad-step]");
-      const adGeneratingKeyword = document.querySelector("#adGeneratingKeyword");
-      const adGeneratingCopy = document.querySelector("#adGeneratingCopy");
       const adResultTitle = document.querySelector("#adResultTitle");
       const adResultCopy = document.querySelector("#adResultCopy");
       const adBrand = document.querySelector("#adBrand");
@@ -1544,8 +1523,6 @@
         const variant = adVariants[choice] || adVariants.easy;
         adChoice = choice;
 
-        adGeneratingKeyword.textContent = variant.keyword;
-        adGeneratingCopy.textContent = variant.generatingCopy;
         adResultTitle.innerHTML = variant.title;
         adResultCopy.textContent = variant.copy;
         adBrand.textContent = variant.brand;
@@ -1626,12 +1603,8 @@
         playerShell.classList.add("ad-mode");
         adLayer.classList.add("active");
         applyAdVariant(adChoice);
-        setAdStep("choice");
-        render();
-        scheduleAdPhase(() => {
-          showAdShort();
-          adTimerId = window.setInterval(renderAd, 200);
-        }, 900);
+        showAdShort();
+        adTimerId = window.setInterval(renderAd, 200);
       }
 
       function endAd(shouldResume = false) {
@@ -1643,7 +1616,7 @@
         pauseAdShort();
         adTimerId = null;
         adPhaseTimerId = null;
-        setAdStep("choice");
+        setAdStep("result");
         adLayer.classList.remove("active");
         adLayer.classList.remove("end-state");
         playerShell.classList.remove("ad-mode");
