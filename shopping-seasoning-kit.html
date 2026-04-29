@@ -7,11 +7,14 @@
     <style>
       :root {
         --red: #d9381e;
+        --deep-red: #b92513;
         --gold: #f5b846;
         --ink: #201714;
-        --muted: #7d6f6b;
+        --muted: #756861;
         --cream: #fff8ee;
+        --paper: #fffdf8;
         --line: #eadfd5;
+        --shadow: 0 24px 60px rgba(92, 54, 25, 0.14);
       }
 
       * {
@@ -22,7 +25,9 @@
         margin: 0;
         min-height: 100vh;
         overflow: hidden;
-        background: var(--cream);
+        background:
+          radial-gradient(circle at 22% 18%, rgba(245, 184, 70, 0.12), transparent 28%),
+          linear-gradient(135deg, #fff8ee 0%, #fff4e5 52%, #fffaf3 100%);
         color: var(--ink);
         font-family:
           "PingFang SC",
@@ -34,15 +39,15 @@
       .nav {
         position: sticky;
         top: 0;
-        z-index: 3;
+        z-index: 4;
         display: flex;
         align-items: center;
         justify-content: space-between;
         height: 58px;
         padding: 0 34px;
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid rgba(234, 223, 213, 0.9);
         background: rgba(255, 248, 238, 0.94);
-        backdrop-filter: blur(12px);
+        backdrop-filter: blur(14px);
       }
 
       .logo {
@@ -57,45 +62,28 @@
 
       .logo-mark {
         display: grid;
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
         place-items: center;
         border-radius: 50%;
         background: var(--red);
         color: #fff;
       }
 
-      .nav-links {
-        display: flex;
-        gap: 22px;
-        color: var(--muted);
-        font-weight: 800;
-      }
-
-      .nav-links a {
-        color: inherit;
-        text-decoration: none;
-      }
-
       .exit-ad {
-        position: fixed;
-        top: 14px;
-        right: 18px;
-        z-index: 8;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        height: 32px;
-        padding: 0 12px;
-        border: 1px solid rgba(217, 56, 30, 0.24);
-        border-radius: 4px;
+        height: 34px;
+        padding: 0 14px;
+        border: 1px solid rgba(217, 56, 30, 0.26);
+        border-radius: 6px;
         background: rgba(255, 255, 255, 0.88);
         color: var(--red);
         font-size: 14px;
         font-weight: 900;
         text-decoration: none;
-        box-shadow: 0 8px 20px rgba(83, 45, 23, 0.1);
-        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 20px rgba(83, 45, 23, 0.08);
       }
 
       .exit-ad:hover,
@@ -105,74 +93,220 @@
         outline: none;
       }
 
-      .hero {
+      .page {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(330px, 0.72fr);
-        gap: 24px;
-        max-width: 1160px;
+        grid-template-columns: minmax(0, 1fr) minmax(310px, 0.7fr);
+        gap: 16px;
+        max-width: 1120px;
+        height: calc(100vh - 58px);
         margin: 0 auto;
-        padding: 14px 24px 8px;
-        align-items: center;
+        padding: 14px 18px 16px;
+        align-items: stretch;
       }
 
-      .hero h1 {
-        margin: 0;
-        font-size: clamp(36px, 4.55vw, 58px);
-        line-height: 1;
-        white-space: nowrap;
+      .story-panel,
+      .buy-panel {
+        min-height: 0;
       }
 
-      .hero h1 span {
-        color: var(--red);
-      }
-
-      .lead {
-        max-width: 600px;
-        margin: 12px 0 0;
-        color: var(--muted);
-        font-size: 17px;
-        font-weight: 700;
-        line-height: 1.45;
+      .story-panel {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: 10px;
       }
 
       .badge-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 0;
-        margin-bottom: 10px;
+        gap: 8px;
       }
 
       .badge {
         padding: 6px 10px;
-        border: 1px solid rgba(217, 56, 30, 0.22);
-        border-radius: 4px;
-        background: #fff;
+        border: 1px solid rgba(217, 56, 30, 0.2);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.72);
         color: var(--red);
+        font-size: 14px;
         font-weight: 900;
       }
 
-      .product-card {
-        padding: 14px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fff;
-        box-shadow: 0 24px 60px rgba(83, 45, 23, 0.12);
+      h1 {
+        margin: 0;
+        font-size: clamp(34px, 4vw, 56px);
+        line-height: 0.98;
+        letter-spacing: 0;
       }
 
-      .product-card img {
+      h1 span {
+        color: var(--red);
+      }
+
+      .lead {
+        max-width: 650px;
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1.45;
+      }
+
+      .scene-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 300px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #201714;
+        box-shadow: var(--shadow);
+      }
+
+      .scene-card img {
         width: 100%;
-        aspect-ratio: 16 / 7.25;
+        height: 100%;
+        min-height: 300px;
         object-fit: cover;
-        border-radius: 6px;
+        display: block;
+      }
+
+      .scene-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(32, 23, 20, 0.56), rgba(32, 23, 20, 0.04) 58%);
+        pointer-events: none;
+      }
+
+      .scene-copy {
+        position: absolute;
+        left: 20px;
+        bottom: 18px;
+        z-index: 1;
+        max-width: 430px;
+        color: #fff;
+      }
+
+      .scene-copy strong {
+        display: block;
+        color: #ffe16d;
+        font-size: 26px;
+        line-height: 1.15;
+      }
+
+      .scene-copy span {
+        display: block;
+        margin-top: 8px;
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.45;
+      }
+
+      .proof-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .proof {
+        min-height: 78px;
+        padding: 12px;
+        border: 1px solid rgba(234, 223, 213, 0.86);
+        border-radius: 8px;
+        background: rgba(255, 253, 248, 0.9);
+      }
+
+      .proof strong,
+      .proof span {
+        display: block;
+      }
+
+      .proof strong {
+        font-size: 17px;
+      }
+
+      .proof span {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      .buy-panel {
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr);
+        gap: 14px;
+      }
+
+      .product-card,
+      .recipe-card,
+      .mini-card {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: rgba(255, 253, 248, 0.96);
+        box-shadow: var(--shadow);
+      }
+
+      .product-card {
+        display: grid;
+        grid-template-columns: 112px minmax(0, 1fr);
+        gap: 14px;
+        align-items: center;
+        padding: 14px;
+      }
+
+      .product-shot {
+        display: grid;
+        place-items: center;
+        min-height: 180px;
+        border-radius: 9px;
+        background:
+          radial-gradient(circle at 50% 20%, rgba(245, 184, 70, 0.26), transparent 42%),
+          #fff6e9;
+      }
+
+      .product-shot img {
+        max-width: 86%;
+        max-height: 168px;
+        object-fit: contain;
+        filter: drop-shadow(0 18px 22px rgba(52, 28, 16, 0.22));
+      }
+
+      .product-info h2 {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.1;
+      }
+
+      .subtitle {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .trust-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 10px 0;
+      }
+
+      .trust-row span {
+        padding: 6px 9px;
+        border-radius: 5px;
+        background: #fff2df;
+        color: #8c4f16;
+        font-size: 13px;
+        font-weight: 900;
       }
 
       .price-row {
         display: flex;
-        align-items: end;
+        align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        margin-top: 10px;
+        gap: 14px;
       }
 
       .price {
@@ -182,15 +316,76 @@
       }
 
       .buy {
-        min-width: 128px;
+        min-width: 112px;
         height: 42px;
         border: 0;
-        border-radius: 6px;
-        background: var(--red);
+        border-radius: 7px;
+        background: linear-gradient(180deg, #ec4329, var(--deep-red));
         color: #fff;
         font-size: 16px;
         font-weight: 900;
         cursor: pointer;
+        box-shadow: 0 12px 22px rgba(217, 56, 30, 0.24);
+      }
+
+      .mini-card {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 12px;
+        box-shadow: none;
+      }
+
+      .mini-card div {
+        padding: 10px;
+        border-radius: 7px;
+        background: #fff8ee;
+      }
+
+      .mini-card strong,
+      .mini-card span {
+        display: block;
+      }
+
+      .mini-card strong {
+        font-size: 16px;
+      }
+
+      .mini-card span {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      .recipe-card {
+        padding: 14px;
+        box-shadow: none;
+      }
+
+      .recipe-card h2 {
+        margin: 0 0 10px;
+        font-size: 20px;
+      }
+
+      .recipe {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .step {
+        min-height: 50px;
+        padding: 10px 10px 10px 13px;
+        border-left: 4px solid var(--gold);
+        border-radius: 6px;
+        background: #fff8ee;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.35;
+        display: flex;
+        align-items: center;
       }
 
       .toast {
@@ -215,178 +410,113 @@
         transform: translate(-50%, 0);
       }
 
-      .sections {
-        max-width: 1160px;
-        margin: 0 auto;
-        padding: 0 24px 18px;
-      }
-
-      .section {
-        margin-top: 8px;
-        min-height: 102px;
-        padding: 14px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fff;
-      }
-
-      .section h2 {
-        margin: 0 0 10px;
-        font-size: 21px;
-      }
-
-      .compact-info {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-      }
-
-      .tile {
-        padding: 12px;
-        border-radius: 6px;
-        background: #fff8ee;
-      }
-
-      .tile strong,
-      .tile span {
-        display: block;
-      }
-
-      .tile strong {
-        font-size: 17px;
-      }
-
-      .tile span {
-        margin-top: 5px;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.35;
-      }
-
-      .flavor-strip {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-      }
-
-      .flavor-strip .tile {
-        min-height: 78px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .recipe {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-      }
-
-      .step {
-        min-height: 48px;
-        padding: 10px 12px;
-        border-left: 4px solid var(--gold);
-        background: #fff8ee;
-        font-size: 14px;
-        line-height: 1.32;
-        display: flex;
-        align-items: center;
-      }
-
-      @media (max-width: 1100px) {
-        .hero h1 {
-          font-size: 46px;
-        }
-      }
-
-      @media (max-width: 860px) {
-        .hero {
+      @media (max-width: 760px) {
+        .page {
           grid-template-columns: 1fr;
-        }
-
-        .hero h1 {
-          white-space: normal;
+          height: auto;
         }
 
         body {
           overflow: auto;
         }
+      }
 
-        .compact-info,
-        .flavor-strip,
-        .grid,
-        .recipe {
-          grid-template-columns: 1fr;
+      @media (max-width: 720px) {
+        .nav {
+          padding: 0 16px;
         }
 
-        .nav-links {
-          display: none;
+        .page {
+          padding: 16px;
+        }
+
+        h1 {
+          font-size: 42px;
+        }
+
+        .product-card,
+        .proof-strip,
+        .mini-card,
+        .recipe {
+          grid-template-columns: 1fr;
         }
       }
     </style>
   </head>
   <body>
-    <a class="exit-ad" href="tencent-video-player-mock.html?adReturn=1">退出广告</a>
-
     <header class="nav">
       <a class="logo" href="tencent-video-player-mock.html?adReturn=1">
         <span class="logo-mark">海</span>
         <span>海天味极鲜</span>
       </a>
-      <nav class="nav-links">
-        <a href="#story">品牌故事</a>
-      </nav>
+      <a class="exit-ad" href="tencent-video-player-mock.html?adReturn=1">退出广告</a>
     </header>
 
-    <main class="hero">
-      <section>
-        <div class="badge-row">
-          <span class="badge">腾讯视频 AI 场景推荐</span>
-          <span class="badge">番茄风味</span>
-          <span class="badge">海天调味</span>
+    <main class="page">
+      <section class="story-panel" aria-label="剧情推荐">
+        <div>
+          <div class="badge-row">
+            <span class="badge">腾讯视频场景推荐</span>
+            <span class="badge">番茄翻炒</span>
+            <span class="badge">少量提鲜</span>
+          </div>
+          <h1>给这锅番茄<span>补一勺鲜味</span></h1>
+          <p class="lead">从刚才的番茄翻炒场景继续推荐：少量加入海天味极鲜，让番茄锅咸鲜层次更完整，适合汤汁、意面和家常炖菜。</p>
         </div>
-        <h1>给这锅番茄<span>补一勺鲜味</span></h1>
-        <p class="lead">根据剧情里的番茄翻炒动作推荐：海天味极鲜、浓汤底、香草点缀，适合番茄汤、意面和家常炖菜。</p>
-      </section>
 
-      <aside class="product-card" id="product">
-        <img src="assets/haitian-seasoning-ad-keyvisual-real-v9.png" alt="海天味极鲜番茄提鲜调味组合" />
-        <h2>海天味极鲜调味组合</h2>
-        <p>1 瓶味极鲜 · 适合番茄锅和家常菜</p>
-        <div class="price-row">
-          <div class="price">¥12.9</div>
-          <button class="buy" data-toast="已进入一键购买流程">一键购买</button>
-        </div>
-      </aside>
-    </main>
-
-    <section class="sections">
-      <div class="compact-info">
-        <div class="section" id="story">
-          <div class="flavor-strip">
-            <div class="tile"><strong>味极鲜</strong><span>补足咸鲜层次，减少反复试味。</span></div>
-            <div class="tile"><strong>番茄锅</strong><span>提升番茄底味，适合汤汁类菜品。</span></div>
-            <div class="tile"><strong>收口提香</strong><span>出锅前少量加入，让家常菜更有完成感。</span></div>
+        <div class="scene-card">
+          <img src="assets/haitian-seasoning-ad-keyvisual-real-v9.png" alt="海天味极鲜番茄提鲜场景" />
+          <div class="scene-copy">
+            <strong>剧情里的那一锅，差的就是这一口鲜</strong>
+            <span>番茄炒出香气后少量加入，咸鲜收口更自然，家常菜也有完成感。</span>
           </div>
         </div>
 
-        <div class="section" id="recipe">
-          <h2>AI 推荐吃法</h2>
+        <div class="proof-strip" id="story">
+          <div class="proof"><strong>场景对味</strong><span>承接视频里的番茄锅，不脱离剧情。</span></div>
+          <div class="proof"><strong>少量提鲜</strong><span>不用重口调味，补足咸鲜层次。</span></div>
+          <div class="proof"><strong>家常高频</strong><span>番茄汤、意面、炖菜都能用。</span></div>
+        </div>
+      </section>
+
+      <aside class="buy-panel" id="product" aria-label="商品信息">
+        <section class="product-card">
+          <div class="product-shot">
+            <img src="assets/haitian-weijixian-product-cutout.png" alt="海天味极鲜酱油" />
+          </div>
+          <div class="product-info">
+            <h2>海天味极鲜调味组合</h2>
+            <p class="subtitle">1 瓶味极鲜 · 适合番茄锅和家常菜</p>
+            <div class="trust-row">
+              <span>品牌调味</span>
+              <span>番茄锅推荐</span>
+              <span>家常菜适用</span>
+            </div>
+            <div class="price-row">
+              <div class="price">¥12.9</div>
+              <button class="buy" data-toast="已为你保留调味组合">一键购买</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="mini-card" aria-label="卖点">
+          <div><strong>味极鲜</strong><span>补足咸鲜层次，减少反复试味。</span></div>
+          <div><strong>番茄锅</strong><span>提升番茄底味，适合汤汁类菜品。</span></div>
+          <div><strong>收口提香</strong><span>出锅前少量加入，让家常菜更完整。</span></div>
+        </section>
+
+        <section class="recipe-card" id="recipe">
+          <h2>推荐吃法</h2>
           <div class="recipe">
             <div class="step">1. 番茄底炒出香气</div>
             <div class="step">2. 少量加入味极鲜</div>
             <div class="step">3. 翻匀补足咸鲜层次</div>
             <div class="step">4. 出锅前撒香草</div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      </aside>
+    </main>
+
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script>
       const toast = document.querySelector("#toast");
