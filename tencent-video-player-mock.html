@@ -570,11 +570,10 @@
         z-index: 4;
       }
 
-      .ad-countdown,
-      .ad-skip,
-      .ad-exit {
+      .ad-countdown {
         height: 36px;
         padding: 0 13px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
         border-radius: 4px;
         background: rgba(0, 0, 0, 0.58);
         color: rgba(255, 255, 255, 0.9);
@@ -583,24 +582,7 @@
         line-height: 36px;
       }
 
-      .ad-skip {
-        border: 1px solid rgba(255, 255, 255, 0.28);
-      }
-
-      .ad-exit {
-        display: none;
-        border: 1px solid rgba(255, 255, 255, 0.28);
-      }
-
-      .ad-layer.end-state .ad-exit {
-        display: inline-block;
-      }
-
-      .ad-layer.end-state .ad-skip {
-        display: none;
-      }
-
-      .ad-skip[disabled] {
+      .ad-countdown[disabled] {
         opacity: 0.46;
         cursor: default;
       }
@@ -1081,9 +1063,7 @@
             <span class="scene-tag">AI 推荐：海天味极鲜</span>
           </div>
           <div class="ad-meta">
-            <span class="ad-countdown" id="adCountdown">AI广告 10s</span>
-            <button class="ad-skip" id="adSkipButton" type="button" disabled>广告播放中</button>
-            <button class="ad-exit" id="adExitButton" type="button">退出广告</button>
+            <button class="ad-countdown" id="adExitButton" type="button" disabled>广告倒计时 10 S</button>
           </div>
           <div class="ad-content">
             <div class="ad-step ad-step-split" data-ad-step="result">
@@ -1236,8 +1216,6 @@
       const aiPrehint = document.querySelector("#aiPrehint");
       const prehintCountdown = document.querySelector("#prehintCountdown");
       const adLayer = document.querySelector("#adLayer");
-      const adCountdown = document.querySelector("#adCountdown");
-      const adSkipButton = document.querySelector("#adSkipButton");
       const adExitButton = document.querySelector("#adExitButton");
       const adResumeButton = document.querySelector("#adResumeButton");
       const adStepNodes = document.querySelectorAll("[data-ad-step]");
@@ -1535,9 +1513,8 @@
         const elapsed = Math.min(activeAdDuration / 1000, (Date.now() - adStartedAt) / 1000);
         const remaining = Math.max(0, Math.ceil(activeAdDuration / 1000 - elapsed));
 
-        adCountdown.textContent = `AI广告 ${remaining}s`;
-        adSkipButton.disabled = adPhase !== "end";
-        adSkipButton.textContent = adPhase === "end" ? "继续正片" : "广告播放中";
+        adExitButton.disabled = adPhase !== "end";
+        adExitButton.textContent = adPhase === "end" ? "退出广告" : `广告倒计时 ${remaining} S`;
 
         if (elapsed >= activeAdDuration / 1000) {
           showAdEnd();
@@ -1551,9 +1528,8 @@
         adTimerId = null;
         pauseAdShort();
         setAdStep("end");
-        adCountdown.textContent = "广告已结束";
-        adSkipButton.disabled = false;
-        adSkipButton.textContent = "继续正片";
+        adExitButton.disabled = false;
+        adExitButton.textContent = "退出广告";
       }
 
       function startAd() {
@@ -1596,12 +1572,6 @@
           contentVideo.play();
         }
       }
-
-      adSkipButton.addEventListener("click", () => {
-        if (!adSkipButton.disabled) {
-          endAd(true);
-        }
-      });
 
       adExitButton.addEventListener("click", () => endAd(true));
 
