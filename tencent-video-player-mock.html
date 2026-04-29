@@ -562,12 +562,12 @@
 
       .ad-meta {
         position: absolute;
-        top: clamp(18px, 2.2vw, 38px);
-        right: clamp(18px, 2.2vw, 38px);
+        top: clamp(12px, 1.4vw, 18px);
+        right: clamp(12px, 1.4vw, 18px);
         display: flex;
         align-items: center;
         gap: 14px;
-        z-index: 4;
+        z-index: 6;
       }
 
       .ad-countdown {
@@ -583,7 +583,6 @@
       }
 
       .ad-countdown[disabled] {
-        opacity: 0.46;
         cursor: default;
       }
 
@@ -1062,9 +1061,6 @@
             <span class="scene-tag">识别动作：准备调味</span>
             <span class="scene-tag">AI 推荐：海天味极鲜</span>
           </div>
-          <div class="ad-meta">
-            <button class="ad-countdown" id="adExitButton" type="button" disabled>广告倒计时 10 S</button>
-          </div>
           <div class="ad-content">
             <div class="ad-step ad-step-split" data-ad-step="result">
               <div>
@@ -1078,6 +1074,9 @@
                 </div>
               </div>
               <aside class="ad-card">
+                <div class="ad-meta">
+                  <button class="ad-countdown" type="button" data-ad-exit-button disabled>广告倒计时 10 S</button>
+                </div>
                 <div class="ad-media">
                   <img class="ad-card-image" id="adCardImage" src="assets/fresh-ingredients.jpg" alt="" />
                   <video
@@ -1096,7 +1095,7 @@
                 </a>
                 <div class="ad-offer">
                   <div class="ad-price" id="adPrice">¥19.9</div>
-                  <a class="ad-cta" id="adCta" href="shopping-fresh-kit.html">一键加入</a>
+                  <a class="ad-cta" id="adCta" href="shopping-fresh-kit.html">查看详情</a>
                 </div>
               </aside>
             </div>
@@ -1112,6 +1111,9 @@
                 </div>
               </div>
               <aside class="ad-card">
+              <div class="ad-meta">
+                <button class="ad-countdown" type="button" data-ad-exit-button>退出广告</button>
+              </div>
               <div class="ad-media">
                 <img class="ad-card-image" id="adEndCardImage" src="assets/fresh-ingredients.jpg" alt="" />
               </div>
@@ -1122,7 +1124,7 @@
                 </a>
                 <div class="ad-offer">
                 <div class="ad-price" id="adEndPrice">¥19.9</div>
-                <a class="ad-cta" id="adEndCta" href="shopping-fresh-kit.html">一键购买</a>
+                <a class="ad-cta" id="adEndCta" href="shopping-fresh-kit.html">查看详情</a>
               </div>
               </aside>
             </div>
@@ -1216,7 +1218,7 @@
       const aiPrehint = document.querySelector("#aiPrehint");
       const prehintCountdown = document.querySelector("#prehintCountdown");
       const adLayer = document.querySelector("#adLayer");
-      const adExitButton = document.querySelector("#adExitButton");
+      const adExitButtons = document.querySelectorAll("[data-ad-exit-button]");
       const adResumeButton = document.querySelector("#adResumeButton");
       const adStepNodes = document.querySelectorAll("[data-ad-step]");
       const adResultTitle = document.querySelector("#adResultTitle");
@@ -1262,7 +1264,7 @@
           brand: "海天味极鲜 x 腾讯视频",
           product: "番茄提鲜调味组合",
           price: "¥12.9",
-          cta: "一键购买",
+          cta: "查看详情",
           tags: ["番茄锅", "味极鲜", "海天调味"],
           endTitle: "海天提鲜方案已生成",
           endCopy: "点击可查看同款味极鲜调味组合；退出广告后继续从剧情原点播放。",
@@ -1280,7 +1282,7 @@
           brand: "鲜食到家 x 腾讯视频",
           product: "番茄浓汤食材包",
           price: "¥19.9",
-          cta: "一键加入",
+          cta: "查看详情",
           tags: ["家庭厨房", "即时配送", "食材包"],
           endTitle: "食材包已为你保留",
           endCopy: "点击可查看同款食材包；退出广告后继续从剧情原点播放。",
@@ -1509,12 +1511,18 @@
         adCardVideo.pause();
       }
 
+      function updateAdExitControls(text, disabled) {
+        adExitButtons.forEach((button) => {
+          button.textContent = text;
+          button.disabled = disabled;
+        });
+      }
+
       function renderAd() {
         const elapsed = Math.min(activeAdDuration / 1000, (Date.now() - adStartedAt) / 1000);
         const remaining = Math.max(0, Math.ceil(activeAdDuration / 1000 - elapsed));
 
-        adExitButton.disabled = adPhase !== "end";
-        adExitButton.textContent = adPhase === "end" ? "退出广告" : `广告倒计时 ${remaining} S`;
+        updateAdExitControls(adPhase === "end" ? "退出广告" : `广告倒计时 ${remaining} S`, adPhase !== "end");
 
         if (elapsed >= activeAdDuration / 1000) {
           showAdEnd();
@@ -1528,8 +1536,7 @@
         adTimerId = null;
         pauseAdShort();
         setAdStep("end");
-        adExitButton.disabled = false;
-        adExitButton.textContent = "退出广告";
+        updateAdExitControls("退出广告", false);
       }
 
       function startAd() {
@@ -1573,7 +1580,13 @@
         }
       }
 
-      adExitButton.addEventListener("click", () => endAd(true));
+      adExitButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (!button.disabled) {
+            endAd(true);
+          }
+        });
+      });
 
       adResumeButton.addEventListener("click", () => endAd(true));
 
